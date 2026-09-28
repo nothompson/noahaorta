@@ -23,6 +23,8 @@ function resize(){
     if(gl != null){
         gl.viewport(0,0,canvas.width,canvas.height);
     }
+
+    heartbeat.handleResize();
 }
 
 async function LoadShader(url){
@@ -65,7 +67,6 @@ function main(){
         return;
     }
     //initial sizing
-    resize();
     window.addEventListener('resize', resize);
 
     //prevent duplicates.
@@ -303,16 +304,11 @@ function RefreshShader(){
     main();
 }
 
-
 document.addEventListener('DOMContentLoaded', main);
-
-// document.addEventListener("resize", () => feedback.handleResize());
 
 //#endregion
 
 //#region Sprites
-
-
 
 const imageMap = new Map();
 
@@ -401,6 +397,7 @@ class Sprite {
 
   handleResize(){
     if(!this.image) return;
+    console.log("resizing");
     this.#resize();
     this.#draw();
   }
@@ -470,6 +467,18 @@ const cursorhover = new Sprite({
     totalFrames: 16,
     columns: 4
 });
+
+const heartbeat = new Sprite({
+    canvas: "heartbeat",
+    source: "../assets/sprites/heart.png",
+    frameWidth: 1000,
+    frameHeight: 1000,
+    totalFrames: 16,
+    columns: 4,
+    displayed: true
+});
+
+heartbeat.ready.then(() => heartbeat.play({fps : 12}));
 
 cursoridle.ready.then(() => cursoridle.play());
 // cursorhover.ready.then(() => cursorhover.play());

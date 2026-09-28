@@ -12,6 +12,13 @@ html.custom-cursor #cursor { display: block; }
 
 #canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh;}
 
+#heartbeat {position: fixed; inset: 0; display: block;   
+  width: clamp(150px, 50vmin, 1000px);
+  height: clamp(150px, 50vmin, 1000px); 
+  z-index: 2; 
+  left: 50%; top: 50%; 
+  transform: translateX(-50%) translateY(-50%);}
+
 #test{
   position: absolute;
   width: 200px;
