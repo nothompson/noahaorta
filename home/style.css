@@ -1,8 +1,14 @@
 html, body {
   margin: 0;
   padding: 0;
-  /* cursor:none; */
 }
+
+#cursor { display: none; }
+
+html.custom-cursor,
+html.custom-cursor body { cursor: none; }
+
+html.custom-cursor #cursor { display: block; }
 
 #canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh;}
 
@@ -11,7 +17,6 @@ html, body {
   width: 200px;
   height: 200px;
   z-index: 1;
-  cursor: pointer;
 }
 #cursor{
   position:fixed;

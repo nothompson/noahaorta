@@ -531,4 +531,27 @@ document.addEventListener("pointerout", e => {
   if (!e.relatedTarget?.closest?.(HOVER_SELECTOR)) setHovering(false);
 });
 
+const cursorMQ = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+function applyCursorMode() {
+  const enabled = cursorMQ.matches;
+  document.documentElement.classList.toggle("custom-cursor", enabled);
+
+  if (enabled) {
+    cursoridle.ready.then(() => {
+      cursoridle.handleResize();
+    cursorhover.image && cursorhover.handleResize();
+    if (!cursorhover.displayed) cursoridle.toggleDisplay(true);
+    });
+  } else {
+    // stop both loops and clear the canvas so no rAF work runs on mobile
+    cursoridle.toggleDisplay(false);
+    cursorhover.toggleDisplay(false);
+    pressed = false;
+  }
+}
+
+applyCursorMode();
+cursorMQ.addEventListener("change", applyCursorMode); // e.g. mouse plugged into a tablet
+
 //#endregion
