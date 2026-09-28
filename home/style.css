@@ -1,7 +1,23 @@
 html, body {
   margin: 0;
   padding: 0;
+  /* cursor:none; */
 }
-canvas {
-  display: block;
+
+#canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh;}
+
+#test{
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  z-index: 1;
+  cursor: pointer;
+}
+#cursor{
+  position:fixed;
+  width: 32px;
+  height: 32px;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
 }
