@@ -5,12 +5,11 @@ let resolution, time, rands;
 
 let index = 0;
 
+let speed = 1.0;
+
 let start = 0.0;
 
 let renderIndex = null;
-
-let cursor;
-let pointerListenerAdded = false;
 
 
 //ensure canvas/aspect ratio fits to screen 
@@ -25,6 +24,8 @@ function resize(){
     }
 
     heartbeat.handleResize();
+
+    // journal.handleResize();
 }
 
 async function LoadShader(url){
@@ -55,7 +56,6 @@ function GetRandomFloat(min, max){
 function main(){
 
     canvas = document.getElementById("canvas");
-    cursor = document.getElementById("cursor");
 
     if(canvas == null){
         console.error("canvas null!");
@@ -69,14 +69,7 @@ function main(){
     //initial sizing
     window.addEventListener('resize', resize);
 
-    //prevent duplicates.
-    if(!pointerListenerAdded){
-      window.addEventListener("pointermove", e=>{
-        cursor.style.transform = `translate(${e.clientX + 5}px, ${e.clientY + 5}px) translate(-50%, -50%)`;
-      }, {passive : true});
-
-      pointerListenerAdded = true;
-    }
+    animateScaleHeart();
 
     //lots of shader functions inspired/taken from inigo quilez
 
@@ -127,6 +120,7 @@ function main(){
         function render(t){
             t -= start;
             t *= 0.0001;
+            t*= speed;
             resize();
             gl.clear(gl.COLOR_BUFFER_BIT);
             gl.uniform2f(resolution, canvas.width, canvas.height);
@@ -199,7 +193,15 @@ function InitUniforms(gl, program){
     time = gl.getUniformLocation(program, 'iTime');
     const randomFloats = gl.getUniformLocation(program, 'iRands');
     
-    gl.uniform4f(randomFloats, GetRandomFloat(-1.0,1.0), GetRandomFloat(-1.0,1.0), GetRandomFloat(-1.0,1.0), GetRandomFloat(-1.0,1.0));
+    const a = GetRandomFloat(-1.0,1.0);
+    const b = GetRandomFloat(-1.0,1.0);
+    const c = GetRandomFloat(-1.0,1.0);
+    const d = GetRandomFloat(-1.0,1.0);
+
+    gl.uniform4f(randomFloats, a, b, c, d);
+
+    console.log(Math.abs(a),Math.abs(b),Math.abs(c),Math.abs(d));
+    // gl.uniform4f(randomFloats, 1.0, 1.0, 1.0, 1.0);
 }
 
 // currently usused
@@ -308,165 +310,7 @@ document.addEventListener('DOMContentLoaded', main);
 
 //#endregion
 
-//#region Sprites
-
-const imageMap = new Map();
-
-function loadImage(src){
-  if(!imageMap.has(src)){
-    imageMap.set(src, new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error(`failed img : ${src}`));
-      img.src = src;
-    }));
-  }
-  return imageMap.get(src);
-}
-
-class Sprite {
-  constructor({ 
-    canvas,
-    source,
-    frameWidth,
-    frameHeight,
-    totalFrames,
-    columns = totalFrames,
-    displayed
-  }){
-    this.canvas = typeof canvas === "string" ? document.getElementById(canvas) : canvas;
-    this.ctx = this.canvas.getContext("2d");
-    this.source = source;
-    this.frameWidth = frameWidth;
-    this.frameHeight = frameHeight;
-    this.totalFrames = totalFrames;
-    this.columns = columns;
-    this.currentFrame = -1;
-    this.image = null;
-    this.#displayed = displayed;
-    this.ready = this.#init();
-  }
-
-  #raf = null;
-  #displayed = false;
-  #playOpts = {};
-
-  get displayed() { return this.#displayed; }
-
-  async #init(){
-    this.image = await loadImage(this.source);
-    this.#resize();
-    this.setFrame(0);
-    return this;
-  }
-
-  #resize() {
-      const dpr = window.devicePixelRatio || 1;
-      const rect = this.canvas.getBoundingClientRect();
-      const w = Math.round((rect.width || this.frameWidth) * dpr);
-      const h = Math.round((rect.height || this.frameHeight) * dpr);
-      if (this.canvas.width !== w) this.canvas.width = w;
-      if (this.canvas.height !== h) this.canvas.height = h;
-  }
-
-  setProgress(norm){
-    const n = Math.min(Math.max(norm, 0), 1);
-    this.setFrame(Math.round(n * (this.totalFrames - 1)));
-  }
-
-  resume() {
-    if (this.#displayed) this.play(this.#playOpts);
-  }
-
-  setFrame(index){
-      if(!this.image) return;
-      const i = ((index % this.totalFrames) + this.totalFrames) % this.totalFrames; // was totalFrames - 1
-      if(i === this.currentFrame) return;
-      this.currentFrame = i;
-      this.#draw();
-  }
-
-  #draw(){
-    if(!this.#displayed) return;
-    const {ctx, canvas, image, frameWidth: fw, frameHeight: fh, columns} = this;
-    const sx = (this.currentFrame % columns) * fw;
-    const sy = Math.floor(this.currentFrame / columns) * fh;
-    ctx.clearRect(0,0,canvas.width, canvas.height);
-    ctx.drawImage(image,sx,sy,fw,fh,0,0,canvas.width,canvas.height);
-  }
-
-  handleResize(){
-    if(!this.image) return;
-    console.log("resizing");
-    this.#resize();
-    this.#draw();
-  }
-
-  toggleDisplay(force = !this.#displayed, {clear = true} = {}) {
-    if(force === this.#displayed) return force;
-    this.#displayed = force;
-
-    if(force){
-      this.currentFrame = -1;
-      this.setFrame(0);
-      this.play(this.#playOpts);
-    }else{
-      this.stop();
-      if(clear) this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
-    }
-    return force;
-  }
-
-  play(opts = {}){
-    this.stop();
-    this.#playOpts = opts;
-    const {fps = 24, loop = true } = opts;
-    let start = null;
-
-    const tick = (now) => {
-      start ??= now;
-      const frame = Math.floor(((now - start) * fps) / 1000);
-
-      if(loop){
-        this.setFrame(frame % this.totalFrames);
-      }
-      else if (frame >= this.totalFrames){
-        this.setFrame(this.totalFrames - 1); 
-        this.#raf = null;
-        return;
-      }
-      else{
-        this.setFrame(frame);
-      }
-
-      this.#raf = requestAnimationFrame(tick);
-    }
-    this.#raf = requestAnimationFrame(tick);
-  }
-
-  stop(){
-    if(this.#raf !== null) cancelAnimationFrame(this.#raf);
-    this.#raf = null;
-  }
-}
-
-const cursoridle = new Sprite({
-    canvas: "cursor",
-    source: "../assets/sprites/cursoridle.png",
-    frameWidth: 512,
-    frameHeight: 512,
-    totalFrames: 15,
-    displayed: true,
-});
-
-const cursorhover = new Sprite({
-    canvas: "cursor",
-    source: "../assets/sprites/cursorpointing.png",
-    frameWidth: 512,
-    frameHeight: 512,
-    totalFrames: 16,
-    columns: 4
-});
+// #region Sprites
 
 const heartbeat = new Sprite({
     canvas: "heartbeat",
@@ -475,92 +319,149 @@ const heartbeat = new Sprite({
     frameHeight: 1000,
     totalFrames: 16,
     columns: 4,
-    displayed: true
+    displayed: false
 });
+
 
 heartbeat.ready.then(() => heartbeat.play({fps : 12}));
 
-cursoridle.ready.then(() => cursoridle.play());
-// cursorhover.ready.then(() => cursorhover.play());
+const journal = new Sprite({
+    canvas: "aboutcanvas",
+    source: "../assets/sprites/journal.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 9,
+    columns: 3,
+    displayed: false
+})
 
-function getMousePos(canvas, evt){
-  var rect = canvas.getBoundingClientRect();
-  return{
-    x: evt.clientX - rect.left,
-    y: evt.clientY - rect.top
-  };
+
+const journal2 = new Sprite({
+    canvas: "spectralmapcanvas",
+    source: "../assets/sprites/journal.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 9,
+    columns: 3,
+    displayed: false
+})
+
+const controller = new Sprite({
+    canvas: "examplescanvas",
+    source: "../assets/sprites/journal.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 9,
+    columns: 3,
+    displayed: false
+})
+
+const portfolio = new Sprite({
+    canvas: "portfoliocanvas",
+    source: "../assets/sprites/journal.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 9,
+    columns: 3,
+    displayed: false
+})
+
+function test(){
+    console.log("finished anim");
 }
+// journal.ready.then(() => journal.play({direction: false, loop: false, func: test}));
 
-const HOVER_SELECTOR = "a, button, [data-hover]";
-let pressed = false;
+// journal2.ready.then(() => journal2.play({direction: true}));
 
-function setHovering(on) {
-  const next = on ? cursorhover : cursoridle;
-  const prev = on ? cursoridle  : cursorhover;
+// heartbeat.ready.then(() => heartbeat.play({fps : 12}));
 
-  if (next.displayed) return;
-  if (!next.image) return;
-  next.toggleDisplay(true);
-  prev.toggleDisplay(false, { clear: false });
-}
+function animateScaleHeart() {
+  const start = performance.now();
 
-function isOverHoverable(e) {
-  // #cursor has pointer-events: none, so this sees the real element underneath
-  return !!document.elementFromPoint(e.clientX, e.clientY)?.closest(HOVER_SELECTOR);
-}
+  function frame(now) {
+    const timeFrac = Math.min((now - start) / 1000, 1);
+    const progress = getValueFromQuarticBezier(timeFrac, [0,0],[0.25,0.5],[0.5,1.5],[0.8,0.8], [1.0,1.0]);
+    const scale = 0 + (1 - 0) * progress;
 
-document.addEventListener("pointerdown", () => {
-  pressed = true;
-  setHovering(true);          // no-op if already showing the hover sprite
-  cursorhover.stop();         // toggleDisplay starts playback, so stop it after
-  cursorhover.setFrame(0);    // hold the pressed frame
-});
+    if(timeFrac < 0.075) heartbeat.toggleDisplay(false);
+    else{
+        heartbeat.toggleDisplay(true);
+    }
 
-function release(e) {
-  if (!pressed) return;
-  pressed = false;
+    heartbeat.canvas.style.transform = `translateX(-50%) translateY(-50%) scale(${scale})`;
 
-  if (isOverHoverable(e)) {
-    cursorhover.resume();     // still over a link: carry on with the hover animation
-  } else {
-    setHovering(false);       // left the target (or clicked empty space): back to idle
+    if (timeFrac < 1) requestAnimationFrame(frame);
+    else{
+        console.log(timelineforlinks());
+    }
   }
+  requestAnimationFrame(frame);
 }
 
-document.addEventListener("pointerup", release);
-document.addEventListener("pointercancel", release); // touch/pen can get cancelled instead of released
+function animateScaleGeneral(sprite, duration=500, startscale= 0.0,endscale=1.0) {
+  const start = performance.now();
 
-document.addEventListener("pointerover", e => {
-  if (pressed) return;        // don't fight the held frame
-  if (e.target.closest?.(HOVER_SELECTOR)) setHovering(true);
-});
+  function frame(now) {
+    const timeFrac = Math.min((now - start) / duration, 1);
+    const progress = getValueFromQuarticBezier(timeFrac, [0,0],[0.25,0.5],[0.5,1.5],[0.8,0.8], [1.0,1.0]);
+    const scale = startscale + (endscale - startscale) * progress;
 
-document.addEventListener("pointerout", e => {
-  if (pressed) return;
-  if (!e.relatedTarget?.closest?.(HOVER_SELECTOR)) setHovering(false);
-});
+    if(timeFrac < 0.075) sprite.toggleDisplay(false);
+    else{
+        sprite.toggleDisplay(true);
+    }
 
-const cursorMQ = window.matchMedia("(hover: hover) and (pointer: fine)");
+    sprite.canvas.style.transform = `scale(${scale})`;
 
-function applyCursorMode() {
-  const enabled = cursorMQ.matches;
-  document.documentElement.classList.toggle("custom-cursor", enabled);
-
-  if (enabled) {
-    cursoridle.ready.then(() => {
-      cursoridle.handleResize();
-    cursorhover.image && cursorhover.handleResize();
-    if (!cursorhover.displayed) cursoridle.toggleDisplay(true);
-    });
-  } else {
-    // stop both loops and clear the canvas so no rAF work runs on mobile
-    cursoridle.toggleDisplay(false);
-    cursorhover.toggleDisplay(false);
-    pressed = false;
+    if (timeFrac < 1) requestAnimationFrame(frame);
   }
+  requestAnimationFrame(frame);
 }
 
-applyCursorMode();
-cursorMQ.addEventListener("change", applyCursorMode); // e.g. mouse plugged into a tablet
+function timelineforlinks(){
+    const start = performance.now();
 
+    let a = false;
+    let b = false;
+    let c = false;
+    
+    function frame(now) {
+        const timeFrac = Math.min((now - start) / 800, 1);
+        const progress = getValueFromCubicBezier(timeFrac, [0,0],[0.33,0.33],[0.66,0.66],[1.0,1.0]);
+        
+    if(timeFrac >= 0.25 && a === false){
+        console.log("quarter done");
+        a = true;
+        animateScaleGeneral(journal);
+    }
+    
+    if(timeFrac >= 0.5 && b === false){
+        console.log("half done");
+        b = true;
+        animateScaleGeneral(portfolio);
+    }
+    
+    if(timeFrac >= 0.75 && c === false){
+        console.log("3/4th done");
+        c = true
+        animateScaleGeneral(journal2);
+    }
+    
+    if (timeFrac < 1) requestAnimationFrame(frame);
+    else{
+        console.log('finished');
+        animateScaleGeneral(controller);
+    }
+ 
+  }
+  requestAnimationFrame(frame);
+}
+
+function OpenJournal(){
+      journal.play({fps: 24, direction: true, loop: false, func: test});
+}
+
+function CloseJournal(){
+      journal.play({fps: 24, direction: false, loop: false, func: test});
+}
 //#endregion

@@ -1,35 +1,83 @@
 html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  overflow: hidden;
+
 }
 
-#cursor { display: none; }
+:root {
+  --mainsize: clamp(150px, 40vmin, 600px);
+  --buttonsize: clamp(64px, 15vmin, 200px);
+  --vgap: 24px;
+  --hgap: 24px;
+  --centered:translateX(-50%) translateY(-50%);
+}
 
-html.custom-cursor,
-html.custom-cursor body { cursor: none; }
 
-html.custom-cursor #cursor { display: block; }
+a{
+  cursor: none;
+}
 
-#canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh;}
+#canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh; z-index: -1;}
 
 #heartbeat {position: fixed; inset: 0; display: block;   
-  width: clamp(150px, 50vmin, 1000px);
-  height: clamp(150px, 50vmin, 1000px); 
+  width: var(--mainsize);
+  height: var(--mainsize);
   z-index: 2; 
   left: 50%; top: 50%; 
-  transform: translateX(-50%) translateY(-50%);}
-
-#test{
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  z-index: 1;
+  transform: var(--centered)
 }
-#cursor{
-  position:fixed;
-  width: 32px;
-  height: 32px;
-  z-index: 100;
-  pointer-events: none;
-  background: transparent;
+
+#about{
+  position: fixed;
+  display:block;
+  left: 50%;
+  bottom: calc(50% + var(--mainsize) / 2 + var(--vgap));
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+#aboutcanvas{
+  width: var(--buttonsize) * 2;
+  height: var(--buttonsize);
+}
+
+#spectralmapcanvas{
+  width: var(--buttonsize) * 2;
+  height: var(--buttonsize);
+}
+
+#portfoliocanvas{
+  width: var(--buttonsize) * 2;
+  height: var(--buttonsize);
+}
+
+#examplescanvas{
+  width: var(--buttonsize) * 2;
+  height: var(--buttonsize);
+}
+
+#portfolio{
+  position: fixed;
+  top: 50%;
+  left: calc(50% + var(--mainsize) / 2 + var(--hgap));
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+#spectralmap{
+  position: fixed;
+  left: 50%;
+  top: calc(50% + var(--mainsize) / 2 + var(--vgap));
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+#examples{
+  position: fixed;
+  top: 50%;
+  right: calc(50% + var(--mainsize) / 2 + var(--hgap));
+  transform: translateY(-50%);
+  z-index: 3;
 }

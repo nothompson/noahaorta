@@ -99,7 +99,7 @@
         // exponential decay of Hurst 
         float gain = exp2(-H);
         // wavelength 
-        float freq = 1.0;
+        float freq = 2.0;
         float amplitude = 1.0;
         // output 
         float value = 0.0;
@@ -172,25 +172,31 @@
     void frag(out vec4 fragColor, in vec2 fragCoord){
         vec2 uv = vUV;
 
-        float speed = 0.1;
-        vec2 dir = vec2(-1.0,1.0);
+        float speed = 2.0;
+        vec2 dir = vec2(iRands.x,iRands.y);
         vec2 scale = vec2(2.0);
 
         //output values from nested fbm
         vec2 q; vec2 r; vec2 p; vec2 g;
 
-        float warp1 = abs(dualWarp(uv * scale, 0.9, q, r));
+        float warp1 = abs(dualWarp(uv * scale + vec2(0.0,0.0), 0.2, q, r));
 
-        float warp2 = fbm(vec2(dualWarp(uv * scale, 0.9, p, g),dualWarp(uv * scale, 0.1, p, g)),0.5);
+        // float warp1 = abs(warp((uv.x,uv.y),0.5));
 
-        float gain = 5.0;
+        // float warp2 = fbm(vec2(dualWarp(uv * scale, 0.25, p, g),dualWarp(uv * scale, 0.75, p, g)),0.9);
 
-        float min = 0.0;
-        vec3 col = vec3(uv.x * abs(iRands.x) + 0.1,uv.y * abs(iRands.y) + 0.1, 0.5 * abs(iRands.z) + 0.1);
+        float gain = 0.1;
+
+        float min = 0.05;
+        // vec3 col = vec3(uv.x * abs(iRands.x),uv.y * abs(iRands.y ), abs(iRands.z));
+
+        vec3 col = vec3(0.25,0.25,0.25);
+
+        // vec3 col = vec3(abs(uv.x * q.x * q.y) * 0.1, abs(uv.y * r.y * r.x)* 0.1, abs((r.x * r.y) * (q.x * q.y)) * 0.1);
 
 
-        col += min;
 
+        col += vec3(0.0025,0.3,0.0025);
         col *= warp1 * gain;    
 
         vec4 sig = vec4(col,1.0);

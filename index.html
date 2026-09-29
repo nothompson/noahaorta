@@ -7,6 +7,7 @@
     
     
     <link rel="stylesheet" type="text/css" href="home/style.css">
+    <link rel="stylesheet" type="text/css" href="global/cursor.css">
     <meta charset="utf-8" />
 
   </head>
@@ -15,11 +16,41 @@
     </main>
     <canvas id="cursor"></canvas>
 
-    <canvas id="test" data-hover></canvas>
+    <!-- <a href="about.html">About</a>
+    <a href="examples.html">Examples</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="spectralmap.html">Spectral Map</a> -->
 
     <canvas id="heartbeat"></canvas>
 
+    <div id = "about">
+        <a href="about.html" > 
+          <canvas id = "aboutcanvas" onmouseenter="OpenJournal()" onmouseleave="CloseJournal()"></canvas>
+        </a>
+    </div>
+
+    <div id = "examples">
+      <a href="examples.html">
+        <canvas id = "examplescanvas"></canvas>
+      </a>
+    </div>
+
+    <div id = "portfolio">
+      <a href="portfolio.html">
+        <canvas id = "portfoliocanvas"></canvas>
+      </a>
+    </div>
+
+    <div id = "spectralmap">
+       <a href="spectralmap.html">
+        <canvas id = "spectralmapcanvas"></canvas>
+       </a>
+    </div>
+    
+
     <canvas id="canvas"></canvas>
+    <script src="global/sprites.js"></script>
+    <script src="global/cursor.js"></script>
     <script src="home/sketch.js"></script>
   </body>
 </html>

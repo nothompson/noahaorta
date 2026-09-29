@@ -1,0 +1,16 @@
+
+  #cursor { display: none; }
+  
+  html.custom-cursor,
+  html.custom-cursor body { cursor: none; }
+  
+  html.custom-cursor #cursor { display: block; }
+  
+#cursor{
+  position:fixed;
+  width: 32px;
+  height: 32px;
+  z-index: 100;
+  pointer-events: none;
+  background: transparent;
+}

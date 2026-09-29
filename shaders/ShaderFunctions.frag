@@ -2,7 +2,7 @@
     uniform vec2 iResolution;
     uniform float iTime;
     uniform vec4 iRands;
-    
+
     varying vec2 vUV;
     
     int randomOctave(in float x)
@@ -17,8 +17,8 @@
     
     vec2 hash(in vec2 x)
     {
-        vec2 k = vec2(abs(iRands.x) + 1.12324905,abs(iRands.y) + 1.12324905);
-        // vec2 k = vec2(1.985924124,1.12398585910);
+        // vec2 k = vec2(abs(iRands.x) + 1.12324905,abs(iRands.y) + 1.12324905);
+        vec2 k = vec2(1.985924124,1.12398585910); 
 
         x = x*k + k.yx;
         return -1.0 + 2.0 * fract(0.025 * k * (x.x*x.y *(x.x + x.y)));
