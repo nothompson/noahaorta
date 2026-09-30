@@ -34,6 +34,7 @@ class Sprite {
     this.image = null;
     this.#displayed = displayed;
     this.ready = this.#init();
+    this.cachedFrame = 0;
   }
 
   #raf = null;
@@ -61,6 +62,7 @@ class Sprite {
   setProgress(norm){
     const n = Math.min(Math.max(norm, 0), 1);
     this.setFrame(Math.round(n * (this.totalFrames - 1)));
+    this.cachedFrame = Math.round(n * (this.totalFrames - 1));
   }
 
   resume() {
@@ -72,6 +74,7 @@ class Sprite {
       const i = ((index % this.totalFrames) + this.totalFrames) % this.totalFrames; // was totalFrames - 1
       if(i === this.currentFrame) return;
       this.currentFrame = i;
+      this.cachedFrame = i;
       this.#draw();
   }
 
@@ -116,45 +119,36 @@ class Sprite {
       start ??= now;
       const frame = Math.floor(((now - start) * fps) / 1000);
 
-      if(loop){
-        if(direction == true){
-          this.setFrame(frame % this.totalFrames);
-        }
-        else if(direction == false){
-          this.setFrame(this.totalFrames - 1 - frame);
-          if(frame < 0) frame = this.totalFrames - 1;
-        }
-      }
-      else if (frame >= this.totalFrames || frame < 0){
-        if(direction == true){
-          this.setFrame(this.totalFrames - 1); 
-        }
-        else if(direction == false){
-          this.setFrame(0);
-        } 
-        this.#raf = null;
-        if(func!=null){
-          func();
-        }
+      if(!loop && frame >= this.totalFrames){
+        let i = direction? this.totalFrames - 1 : 0;
+        this.setFrame(i);
+        this.cachedFrame = i;
+        this.#raf= null
+        if(func != null) func();
         return;
       }
-      // else if (frame <= 0){
-      //   this.setFrame(0); 
-      //   this.#raf = null;
-      //   if(func!=null){
-      //     func();
-      //   }
-      //   return;
-      // }
-      else if (direction == true){
-        this.setFrame(frame);
+
+      let index;
+
+      if(loop && pingpong){
+        const period = Math.max(1, 2 * (this.totalFrames - 1));
+        const p = frame % period;
+        index = p < this.totalFrames ? p : period - p;
       }
-      else if (direction == false){
-        this.setFrame((this.totalFrames - 1) - frame);
+      else if (loop){
+        index = frame % this.totalFrames;
+      }
+      else{
+        index = frame;
       }
 
+      
+      this.setFrame(direction ? index : this.totalFrames - 1 - index);
+      
+      
       this.#raf = requestAnimationFrame(tick);
     }
+    this.cachedFrame = index;
     this.#raf = requestAnimationFrame(tick);
   }
 

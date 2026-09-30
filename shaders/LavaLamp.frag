@@ -190,13 +190,13 @@
         float min = 0.05;
         // vec3 col = vec3(uv.x * abs(iRands.x),uv.y * abs(iRands.y ), abs(iRands.z));
 
-        vec3 col = vec3(0.25,0.25,0.25);
+        vec3 col = vec3(0.1 + uv.x * 0.1,0.1 + uv.y * 0.4,0.1 + uv.y* 0.1);
 
         // vec3 col = vec3(abs(uv.x * q.x * q.y) * 0.1, abs(uv.y * r.y * r.x)* 0.1, abs((r.x * r.y) * (q.x * q.y)) * 0.1);
 
 
 
-        col += vec3(0.0025,0.3,0.0025);
+        // col += vec3(0.0025,0.3,0.0025);
         col *= warp1 * gain;    
 
         vec4 sig = vec4(col,1.0);

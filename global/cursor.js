@@ -3,10 +3,10 @@ let pointerListenerAdded = false;
 
     cursor = document.getElementById("cursor");
 
-    console.log("cursor main");
-
+    //prevents reloads 
     if(!pointerListenerAdded){
       window.addEventListener("pointermove", e=>{
+        //centering
         cursor.style.transform = `translate(${e.clientX + 5}px, ${e.clientY + 5}px) translate(-50%, -50%)`;
       }, {passive : true});
 
@@ -33,7 +33,6 @@ const cursorhover = new Sprite({
 });
 
 cursoridle.ready.then(() => cursoridle.play());
-// cursorhover.ready.then(() => cursorhover.play());
 
 function getMousePos(canvas, evt){
   var rect = canvas.getBoundingClientRect();
@@ -53,6 +52,7 @@ function setHovering(on) {
   if (next.displayed) return;
   if (!next.image) return;
   next.toggleDisplay(true);
+  next.play();
   prev.toggleDisplay(false, { clear: false });
 }
 

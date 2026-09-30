@@ -25,7 +25,12 @@ function resize(){
 
     heartbeat.handleResize();
 
-    // journal.handleResize();
+    journal.handleResize();
+
+    abouttext.handleResize();
+    examplestext.handleResize();
+    portfoliotext.handleResize();
+    spectralmaptext.handleResize();
 }
 
 async function LoadShader(url){
@@ -64,7 +69,6 @@ function main(){
     gl = canvas.getContext("webgl");
     if(gl == null){
         console.error("webgl null!!!");
-        return;
     }
     //initial sizing
     window.addEventListener('resize', resize);
@@ -74,6 +78,7 @@ function main(){
     //lots of shader functions inspired/taken from inigo quilez
 
 
+    if(gl != null){
     //vertex shader for 2d is very simple
     const Vert = 
     `
@@ -134,6 +139,7 @@ function main(){
         renderIndex = requestAnimationFrame(render);
         console.log(renderIndex);
     });
+    }
     
 }
 //end of main
@@ -330,18 +336,62 @@ const journal = new Sprite({
     source: "../assets/sprites/journal.png",
     frameWidth: 1024,
     frameHeight: 512,
-    totalFrames: 9,
+    totalFrames: 8,
     columns: 3,
     displayed: false
 })
 
-
-const journal2 = new Sprite({
-    canvas: "spectralmapcanvas",
-    source: "../assets/sprites/journal.png",
+const abouttext = new Sprite({
+    canvas: "abouttitle",
+    source: "../assets/image/abouttitle.png",
     frameWidth: 1024,
     frameHeight: 512,
-    totalFrames: 9,
+    totalFrames: 1,
+    columns: 1,
+    displayed: false
+})
+
+const portfoliotext = new Sprite({
+    canvas: "portfoliotitle",
+    source: "../assets/image/portfoliotitle.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 1,
+    columns: 1,
+    displayed: false
+})
+
+
+const examplestext = new Sprite({
+    canvas: "examplestitle",
+    source: "../assets/image/examplestitle.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 1,
+    columns: 1,
+    displayed: false
+})
+
+
+const spectralmaptext = new Sprite({
+    canvas: "spectralmaptitle",
+    source: "../assets/image/spectralmaptitle.png",
+    frameWidth: 1024,
+    frameHeight: 512,
+    totalFrames: 1,
+    columns: 1,
+    displayed: false
+})
+
+
+
+
+const spectralmap = new Sprite({
+    canvas: "spectralmapcanvas",
+    source: "../assets/sprites/sun.png",
+    frameWidth: 512,
+    frameHeight: 512,
+    totalFrames: 7,
     columns: 3,
     displayed: false
 })
@@ -433,24 +483,29 @@ function timelineforlinks(){
         console.log("quarter done");
         a = true;
         animateScaleGeneral(journal);
+        animateScaleGeneral(abouttext);
     }
     
     if(timeFrac >= 0.5 && b === false){
         console.log("half done");
         b = true;
         animateScaleGeneral(portfolio);
+        animateScaleGeneral(portfoliotext);
     }
     
     if(timeFrac >= 0.75 && c === false){
         console.log("3/4th done");
         c = true
-        animateScaleGeneral(journal2);
+        animateScaleGeneral(controller);
+        animateScaleGeneral(examplestext);
     }
     
     if (timeFrac < 1) requestAnimationFrame(frame);
     else{
         console.log('finished');
-        animateScaleGeneral(controller);
+
+                animateScaleGeneral(spectralmap);
+        animateScaleGeneral(spectralmaptext);
     }
  
   }
@@ -464,4 +519,13 @@ function OpenJournal(){
 function CloseJournal(){
       journal.play({fps: 24, direction: false, loop: false, func: test});
 }
+
+function HoverSpectral(){
+      spectralmap.play({fps: 12, pingpong: true});
+}
+
+function LeaveSpectral(){
+      spectralmap.stop()
+}
+
 //#endregion

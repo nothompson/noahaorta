@@ -23,32 +23,40 @@
 
     <canvas id="heartbeat"></canvas>
 
+    <div id = "options"> 
     <div id = "about">
-        <a href="about.html" > 
+        <a href="about.html"> 
           <canvas id = "aboutcanvas" onmouseenter="OpenJournal()" onmouseleave="CloseJournal()"></canvas>
+          <canvas id = "abouttitle"></canvas>
         </a>
+    </div>
+
+    
+    <div id = "portfolio">
+      <a href="portfolio.html">
+        <canvas id = "portfoliocanvas"></canvas>
+        <canvas id = "portfoliotitle"></canvas>
+      </a>
     </div>
 
     <div id = "examples">
       <a href="examples.html">
         <canvas id = "examplescanvas"></canvas>
-      </a>
-    </div>
-
-    <div id = "portfolio">
-      <a href="portfolio.html">
-        <canvas id = "portfoliocanvas"></canvas>
+        <canvas id = "examplestitle"></canvas>
       </a>
     </div>
 
     <div id = "spectralmap">
        <a href="spectralmap.html">
-        <canvas id = "spectralmapcanvas"></canvas>
+        <canvas id = "spectralmapcanvas" onmouseenter="HoverSpectral()" onmouseleave="LeaveSpectral()"></canvas>
+        <canvas id = "spectralmaptitle"></canvas>
        </a>
+    </div>
+
     </div>
     
 
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas> 
     <script src="global/sprites.js"></script>
     <script src="global/cursor.js"></script>
     <script src="home/sketch.js"></script>
