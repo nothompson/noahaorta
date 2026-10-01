@@ -7,3 +7,30 @@ html, body {
 }
 
 #canvas {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh; z-index: -1;}
+
+#container{
+  position: relative;
+}
+#trailertitle{
+  text-align: center;
+  /* transform: translateX(-50%); */
+}
+
+#trailer {
+  position: relative;
+}
+
+#description{
+  position: relative;
+}
+
+#wishlist{
+  /* gap: 0vh; */
+  /* margin-top: 20px; */
+  position: relative;
+  text-align: center;
+}
+
+#learnmore{
+  position: relative;
+}

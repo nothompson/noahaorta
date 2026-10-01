@@ -27,6 +27,8 @@ function resize(){
 
     journal.handleResize();
 
+    spectralmap.handleResize();
+
     abouttext.handleResize();
     examplestext.handleResize();
     portfoliotext.handleResize();
@@ -395,6 +397,16 @@ const spectralmap = new Sprite({
     columns: 3,
     displayed: false
 })
+
+// const spectralmap = new Sprite({
+//     canvas: "spectralmapcanvas",
+//     source: "../assets/sprites/tooth.png",
+//     frameWidth: 512,
+//     frameHeight: 512,
+//     totalFrames: 20,
+//     columns: 5,
+//     displayed: false
+// })
 
 const controller = new Sprite({
     canvas: "examplescanvas",
