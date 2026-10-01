@@ -7,9 +7,9 @@ html, body {
 }
 
 :root {
-  --mainsize: clamp(150px, 35vmin, 600px);
-  --buttonsize: clamp(64px, 10vmin, 200px);
-  --textsize: clamp(64px, 10vmin, 200px);
+  --mainsize: clamp(150px, 37vmin, 600px);
+  --buttonsize: clamp(64px, 12vmin, 200px);
+  --textsize: clamp(64px, 12vmin, 200px);
   --vgap: 32px;
   --hgap: 0px;
   --gap: 0px;
@@ -72,6 +72,12 @@ a{
 #spectralmap{
   margin-left: calc(var(--buttonsize) * 0.5);
 }
+
+
+#spectralmap a{
+  gap: 4px;
+}
+
 
 
 #aboutcanvas{

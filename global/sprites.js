@@ -115,14 +115,16 @@ class Sprite {
     const {fps = 24, loop = true, pingpong = false, direction = true, func = null} = opts;
     let start = null;
 
+    const current = Math.min(Math.max(this.cachedFrame, 0), this.totalFrames - 1);
+    const offset = direction ? current : this.totalFrames - 1 - current;
+
     const tick = (now) => {
       start ??= now;
-      const frame = Math.floor(((now - start) * fps) / 1000);
+      const frame = offset + Math.floor(((now - start) * fps) / 1000);
 
       if(!loop && frame >= this.totalFrames){
         let i = direction? this.totalFrames - 1 : 0;
         this.setFrame(i);
-        this.cachedFrame = i;
         this.#raf= null
         if(func != null) func();
         return;
@@ -148,7 +150,6 @@ class Sprite {
       
       this.#raf = requestAnimationFrame(tick);
     }
-    this.cachedFrame = index;
     this.#raf = requestAnimationFrame(tick);
   }
 
