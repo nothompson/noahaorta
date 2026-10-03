@@ -29,6 +29,10 @@ function resize(){
 
     spectralmap.handleResize();
 
+    controller.handleResize();
+
+    portfolio.handleResize();
+
     abouttext.handleResize();
     examplestext.handleResize();
     portfoliotext.handleResize();
@@ -410,8 +414,8 @@ const spectralmap = new Sprite({
 
 const controller = new Sprite({
     canvas: "examplescanvas",
-    source: "../assets/sprites/journal.png",
-    frameWidth: 1024,
+    source: "../assets/sprites/controller.png",
+    frameWidth: 512,
     frameHeight: 512,
     totalFrames: 9,
     columns: 3,
@@ -420,10 +424,10 @@ const controller = new Sprite({
 
 const portfolio = new Sprite({
     canvas: "portfoliocanvas",
-    source: "../assets/sprites/journal.png",
+    source: "../assets/sprites/moldmidi.png",
     frameWidth: 1024,
     frameHeight: 512,
-    totalFrames: 9,
+    totalFrames: 8,
     columns: 3,
     displayed: false
 })
@@ -431,6 +435,7 @@ const portfolio = new Sprite({
 function test(){
     console.log("finished anim");
 }
+portfolio.ready.then(()=> portfolio.setFrame(8));
 // journal.ready.then(() => journal.play({direction: false, loop: false, func: test}));
 
 // journal2.ready.then(() => journal2.play({direction: true}));
@@ -538,6 +543,22 @@ function HoverSpectral(){
 
 function LeaveSpectral(){
       spectralmap.stop()
+}
+
+function HoverExamples(){
+      controller.play({fps: 12});
+}
+
+function LeaveExamples(){
+      controller.stop()
+}
+
+function HoverPortfolio(){
+      portfolio.play({fps: 12, direction: true, loop: false});
+}
+
+function LeavePortfolio(){
+      portfolio.play({fps: 12, direction: false, loop: false});
 }
 
 //#endregion

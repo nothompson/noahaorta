@@ -48,88 +48,88 @@ function GetRandomFloat(min, max){
     return Math.random() * range + min;
 }
 
-// function main(){
+function main(){
 
-//     canvas = document.getElementById("canvas");
+    canvas = document.getElementById("canvas");
 
-//     if(canvas == null){
-//         console.error("canvas null!");
-//         return;
-//     }
-//     gl = canvas.getContext("webgl");
-//     if(gl == null){
-//         console.error("webgl null!!!");
-//     }
-//     //initial sizing
-//     window.addEventListener('resize', resize);
+    if(canvas == null){
+        console.error("canvas null!");
+        return;
+    }
+    gl = canvas.getContext("webgl");
+    if(gl == null){
+        console.error("webgl null!!!");
+    }
+    //initial sizing
+    window.addEventListener('resize', resize);
 
-//     //lots of shader functions inspired/taken from inigo quilez
+    //lots of shader functions inspired/taken from inigo quilez
 
 
-//     if(gl != null){
-//     //vertex shader for 2d is very simple
-//     const Vert = 
-//     `
-//         precision highp float;
+    if(gl != null){
+    //vertex shader for 2d is very simple
+    const Vert = 
+    `
+        precision highp float;
 
-//         attribute vec2 aPosition;
-//         attribute vec2 aUV;
+        attribute vec2 aPosition;
+        attribute vec2 aUV;
 
-//         varying vec2 vPosition;
-//         varying vec2 vUV;
+        varying vec2 vPosition;
+        varying vec2 vUV;
 
-//         void main(){
-//             gl_Position = vec4(aPosition, 0.0, 1.0);
-//             vPosition = gl_Position.xy;
-//             vUV = aUV;
-//         }
-//     `;
+        void main(){
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+            vPosition = gl_Position.xy;
+            vUV = aUV;
+        }
+    `;
 
-//     let selectedShader = Shaders[index];
+    let selectedShader = Shaders[index];
 
-//     gl.useProgram(null);
-//     if(program != null) gl.deleteProgram(program);
+    gl.useProgram(null);
+    if(program != null) gl.deleteProgram(program);
 
-//     if(renderIndex != null)
-//     {
-//         cancelAnimationFrame(renderIndex)
-//         renderIndex = null;
-//     };
+    if(renderIndex != null)
+    {
+        cancelAnimationFrame(renderIndex)
+        renderIndex = null;
+    };
 
-//     console.log(renderIndex);
+    console.log(renderIndex);
 
-//     //'then' calls the lambda functions after function returns. allows us to use frag returned from shader, but after its not null
-//     LoadShader(selectedShader.path).then(Frag =>
-//     {
-//         program = CreateShader(gl,Vert,Frag);
+    //'then' calls the lambda functions after function returns. allows us to use frag returned from shader, but after its not null
+    LoadShader(selectedShader.path).then(Frag =>
+    {
+        program = CreateShader(gl,Vert,Frag);
 
-//         gl.useProgram(program);
-//         InitAttributes(gl,program);
+        gl.useProgram(program);
+        InitAttributes(gl,program);
 
-//         // disabled textures 
-//         // InitTextures(gl,program);
-//         InitUniforms(gl,program);
+        // disabled textures 
+        // InitTextures(gl,program);
+        InitUniforms(gl,program);
 
-//         function render(t){
-//             t -= start;
-//             t *= 0.0001;
-//             t*= speed;
-//             resize();
-//             gl.clear(gl.COLOR_BUFFER_BIT);
-//             gl.uniform2f(resolution, canvas.width, canvas.height);
-//             gl.uniform1f(time, t);
-//             gl.drawArrays(gl.TRIANGLES, 0, 6);
-//             renderIndex = requestAnimationFrame(render);
-//         }
+        function render(t){
+            t -= start;
+            t *= 0.0001;
+            t*= speed;
+            resize();
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            gl.uniform2f(resolution, canvas.width, canvas.height);
+            gl.uniform1f(time, t);
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            renderIndex = requestAnimationFrame(render);
+        }
 
-//         start = performance.now();
+        start = performance.now();
 
-//         renderIndex = requestAnimationFrame(render);
-//         console.log(renderIndex);
-//     });
-//     }
+        renderIndex = requestAnimationFrame(render);
+        console.log(renderIndex);
+    });
+    }
     
-// }
+}
 //end of main
 
 function InitAttributes(gl, program)

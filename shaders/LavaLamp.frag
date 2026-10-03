@@ -185,7 +185,7 @@
 
         // float warp2 = fbm(vec2(dualWarp(uv * scale, 0.25, p, g),dualWarp(uv * scale, 0.75, p, g)),0.9);
 
-        float gain = 0.1;
+        float gain = 0.25;
 
         float min = 0.05;
         // vec3 col = vec3(uv.x * abs(iRands.x),uv.y * abs(iRands.y ), abs(iRands.z));

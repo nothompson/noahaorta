@@ -69,8 +69,9 @@ a{
 }
 
 
-#spectralmap{
+#spectralmap, #examples{
   margin-left: calc(var(--buttonsize) * 0.5);
+  margin-right: calc(var(--buttonsize) * 0.5);
 }
 
 
@@ -97,12 +98,12 @@ a{
 }
 
 #portfoliocanvas{
-  width: var(--buttonsize) * 2;
+  width: calc(var(--buttonsize) * 2);
   height: var(--buttonsize);
 }
 
 #examplescanvas{
-  width: var(--buttonsize) * 2;
+  width: var(--buttonsize);
   height: var(--buttonsize);
 }
 
