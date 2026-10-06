@@ -1,57 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset="utf-8" />
     <script src="https://cdn.jsdelivr.net/npm/p5@2.3.3/lib/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/p5.sound@0.4.1/dist/p5.sound.min.js"></script>
-    
-    
-    
     <link rel="stylesheet" type="text/css" href="spectralmap/spectralmap.css">
     <link rel="stylesheet" type="text/css" href="global/cursor.css">
-    <meta charset="utf-8" />
-
   </head>
   <body>
-    <main>
-    </main>
+    <canvas id="canvas"></canvas>
     <canvas id="cursor"></canvas>
-    <div id="container">
-    <div id="trailertitle">
-      <p>
-      Trailer
-      </p>
-    </div>
 
-  <div>
-    <!-- <iframe src="https://www.youtube.com/embed/uga7mOrNoqo?si=AifvoBIy_r71TJeS"></iframe> -->
-     <iframe id="trailer" src="https://player.vimeo.com/video/1232164688?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="trailer"></iframe><script src="https://player.vimeo.com/api/player.js"></script>
-  </div>
+    <main id="container">
+      <div id="trailertitle">
+        <p>Trailer</p>
+      </div>
 
-   <div id = "wishlist">
-      <a href="https://store.steampowered.com/app/4331960/Spectral_Map/">Wishlist here today!</a>
-  </div>
+      <div id="trailerwrap">
+        <iframe id="trailer" src="https://player.vimeo.com/video/1232164688?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" frameborder="0" allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" referrerpolicy="strict-origin-when-cross-origin" title="trailer"></iframe>
+      </div>
 
-  <div id="description">
-    <p>
-    Spectral Map is a movement based texture adventure with rpg elements. 
-    The visuals explore plasticine clay in a video game setting through traditional stop motion, stratacut techniques, and 3d scanning. 
-    Audio adapts to player navigation and circumstance with cellular compositions, along with a real-time granular effect driven by speed.
-    These design pillars make Spectral Map one of the only games to implement reactive granularity in the music, and one of the only games in the first person shooter genre to be made entirely out of clay.
-    </p>
-  </div>
+      <div id="wishlist">
+        <a href="https://store.steampowered.com/app/4331960/Spectral_Map/">Wishlist on Steam now!</a>
+      </div>
 
-  <div id = "learnmore">
-    <p>
-    Want to learn more about the game's granular plugin or audio implementation? Check out the examples page. 
-    Want to see some of behind the scenes of the visual production? Check out the portfolio page. 
-    </p>
+      <div id="description">
+        <p>
+          Spectral Map is a movement based texture adventure with rpg elements.
+          The visuals explore plasticine clay in a video game setting through traditional stop motion, stratacut techniques, and 3d scanning.
+          Audio adapts to player navigation and circumstance with cellular compositions, along with a real-time granular effect driven by speed.
+          These design pillars make Spectral Map one of the only games to implement reactive granularity in the music, and one of the only games in the first person shooter genre to be made entirely out of clay.
+        </p>
+      </div>
 
-  </div>
+      <div id="learnmore">
+        <p>
+          Want to learn more about the game's granular plugin or audio implementation? 
 
-    <div id="container">
+        </p>
+        <p>
+          Check out the examples page.
+        </p>
+      </div>
+    </main>
 
-    
-    <canvas id="canvas"></canvas> 
+    <script src="https://player.vimeo.com/api/player.js"></script>
     <script src="global/sprites.js"></script>
     <script src="global/cursor.js"></script>
     <script src="spectralmap/spectralmap.js"></script>
