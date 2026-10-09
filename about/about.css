@@ -5,3 +5,63 @@ html, body {
   height : 100%
 
 }
+
+#canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+}
+
+
+a{
+  cursor: none;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  font-weight: 525;
+}
+
+a:hover {
+  opacity: 0.6;
+}
+
+
+#bg {position: absolute; inset: 0; display: block; width : 100vw; height: 100vh; z-index: -10; background-color: rgb(22, 22, 22);}
+
+.abouttext {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 640px);
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+}
+
+.abouttext h1 {
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  letter-spacing: -0.02em;
+}
+
+.abouttext p {
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  line-height: 1.7;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.abouttext em {
+  font-style: normal;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.contact {
+  display: flex;
+  align-items: center;   
+  flex-direction: column; 
+}
